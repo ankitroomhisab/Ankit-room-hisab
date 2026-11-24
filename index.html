@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ankit Room Hisab</title>
+<style>
+body{font-family:Arial;background:#f1f5f9;margin:0;padding:20px}
+.container{max-width:500px;margin:auto;background:white;padding:20px;border-radius:15px}
+h2{text-align:center;color:#2563eb}
+input,button{width:100%;padding:12px;margin:7px 0;box-sizing:border-box;border-radius:8px}
+input{border:1px solid #ccc}
+button{background:#2563eb;color:white;border:0;font-size:16px}
+.item{padding:10px;background:#eff6ff;margin:8px 0;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>🏠 Ankit Room Hisab</h2>
+<input id="name" placeholder="किसने खर्च किया?">
+<input id="amount" type="number" placeholder="कितने रुपये खर्च किए?">
+<input id="detail" placeholder="खर्च का विवरण">
+<button onclick="addExpense()">खर्च जोड़ें</button>
+<h3>खर्च की लिस्ट</h3>
+<div id="list"></div>
+<h3 id="total">कुल खर्च: ₹0</h3>
+</div>
+<script>
+let expenses=JSON.parse(localStorage.getItem("expenses")||"[]");
+function show(){
+let total=0;
+document.getElementById("list").innerHTML="";
+expenses.forEach((e,i)=>{
+total+=e.amount;
+document.getElementById("list").innerHTML+=
+`<div class="item">${e.name} - ₹${e.amount}<br>${e.detail}
+<button onclick="del(${i})">Delete</button></div>`;
+});
+document.getElementById("total").innerText="कुल खर्च: ₹"+total;
+}
+function addExpense(){
+let name=document.getElementById("name").value;
+let amount=Number(document.getElementById("amount").value);
+let detail=document.getElementById("detail").value;
+if(!name||amount<=0){alert("नाम और सही रकम भरें");return;}
+expenses.push({name,amount,detail});
+localStorage.setItem("expenses",JSON.stringify(expenses));
+show();
+document.getElementById("name").value="";
+document.getElementById("amount").value="";
+document.getElementById("detail").value="";
+}
+function del(i){
+expenses.splice(i,1);
+localStorage.setItem("expenses",JSON.stringify(expenses));
+show();
+}
+show();
+</script>
+</body>
+</html>
